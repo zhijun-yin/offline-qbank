@@ -1,0 +1,21 @@
+{
+  "name": "offline-qbank",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "An empty, local-first question bank framework with portable backups.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/core.test.mjs",
+    "test:e2e": "node tests/e2e.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "playwright": "^1.63.0"
+  }
+}

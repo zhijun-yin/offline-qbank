@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>离线题库 · OfflineQBank</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%233755cf'/%3E%3Cpath d='M11 11h18v22l-9-5-9 5z' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#overview"><span class="brand-mark" aria-hidden="true">▤</span><span>Offline<span class="brand-light">QBank</span><small>可扩展的离线题库框架</small></span></a>
+      <div class="nav-label">学习空间</div>
+      <nav aria-label="主导航">
+        <a href="#overview" data-nav="overview"><span aria-hidden="true">◫</span>概览</a>
+        <a href="#bank" data-nav="bank"><span aria-hidden="true">▤</span>我的题库<span id="nav-count" class="nav-count">0</span></a>
+        <a href="#practice" data-nav="practice"><span aria-hidden="true">▷</span>开始练习</a>
+        <a href="#records" data-nav="records"><span aria-hidden="true">◷</span>练习记录</a>
+        <a href="#connect" data-nav="connect"><span aria-hidden="true">⌘</span>API 与数据</a>
+      </nav>
+      <div class="sidebar-note"><span class="status-dot"></span><b>本机优先</b><p>题库和进度保存在当前浏览器。<br>API 仅在你主动调用时连接。</p></div>
+      <div class="sidebar-bottom"><span>FRAMEWORK</span><span>v0.1.0</span></div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar"><div class="breadcrumb">我的空间 <span>/</span> <b id="breadcrumb-page">概览</b></div><div class="topbar-actions"><span id="save-state" class="save-state">正在准备…</span><button id="undo-change" class="button small" disabled>撤销修改</button><button id="quick-export" class="button small">导出备份 <span aria-hidden="true">↗</span></button></div></header>
+      <main id="view" tabindex="-1"></main>
+      <footer class="footer"><span>学习的内容，由你来决定。</span><span>空白模板 · 数据可携带 · API 可替换</span></footer>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <input id="file-input" type="file" accept=".json,application/json" hidden>
+  <dialog id="question-dialog" class="dialog question-dialog">
+    <form id="question-form">
+      <div class="dialog-heading"><div><div class="eyebrow">QUESTION EDITOR</div><h2 id="editor-title">添加题目</h2></div><button type="button" data-close="question-dialog" class="close-button" aria-label="关闭编辑器">×</button></div>
+      <div class="editor-fields">
+        <div class="form-grid three"><label>题型<select id="q-type"><option value="single">单选题</option><option value="multiple">多选题</option><option value="boolean">判断题</option><option value="fill">填空题</option><option value="text">简答题</option></select></label><label>所属分类<select id="q-category"></select></label><label>难度<select id="q-difficulty"><option value="easy">基础</option><option value="medium">进阶</option><option value="hard">挑战</option></select></label></div>
+        <label>题干<textarea id="q-stem" rows="5" maxlength="20000" placeholder="由你填写题干。框架不内置任何题目。"></textarea></label>
+        <div id="answer-editor"></div>
+        <label>解析<textarea id="q-explanation" rows="3" maxlength="20000" placeholder="填写解题过程或知识点，可留空。"></textarea></label>
+        <div class="form-grid three"><label>标签<input id="q-tags" maxlength="620" placeholder="用中文或英文逗号分隔"></label><label>分值<input id="q-score" type="number" min="0.1" max="100" step="0.1" value="1"></label><label>题目状态<select id="q-status"><option value="draft">草稿</option><option value="ready">可练习</option></select></label></div>
+        <p id="editor-error" class="form-error" role="alert"></p>
+      </div>
+      <div class="dialog-footer"><span>草稿可留空；完整题目才能加入练习。</span><div><button type="button" data-close="question-dialog" class="button">取消</button><button class="button primary" type="submit">保存题目</button></div></div>
+    </form>
+  </dialog>
+  <dialog id="confirm-dialog" class="dialog confirm-dialog"><div class="dialog-heading"><h2 id="confirm-title">确认操作</h2><button class="close-button" type="button" data-close="confirm-dialog" aria-label="关闭">×</button></div><p id="confirm-description"></p><div class="dialog-footer"><button type="button" data-close="confirm-dialog" class="button">取消</button><button id="confirm-action" class="button primary" type="button">确认</button></div></dialog>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

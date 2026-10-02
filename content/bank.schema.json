@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OfflineQBank author format",
+  "type": "object",
+  "required": ["version", "categories", "questions"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "const": 1 },
+    "categories": { "type": "array", "maxItems": 500, "items": { "$ref": "#/definitions/category" } },
+    "questions": { "type": "array", "maxItems": 5000, "items": { "$ref": "#/definitions/question" } }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "id": { "type": "string", "pattern": "^[a-zA-Z0-9_-]{1,80}$" },
+    "category": {
+      "type": "object", "required": ["id", "name"],
+      "properties": { "id": { "$ref": "#/definitions/id" }, "name": { "type": "string", "minLength": 1, "maxLength": 60 }, "createdAt": { "type": "integer", "minimum": 0 } },
+      "additionalProperties": false
+    },
+    "option": {
+      "oneOf": [
+        { "type": "string", "maxLength": 2000 },
+        { "type": "object", "required": ["id", "text"], "properties": { "id": { "$ref": "#/definitions/id" }, "text": { "type": "string", "maxLength": 2000 } }, "additionalProperties": false }
+      ]
+    },
+    "question": {
+      "type": "object", "required": ["id", "type", "stem"],
+      "properties": {
+        "id": { "$ref": "#/definitions/id" },
+        "type": { "enum": ["single", "multiple", "boolean", "fill", "text"] },
+        "stem": { "type": "string", "maxLength": 20000 },
+        "status": { "enum": ["draft", "ready"], "default": "ready" },
+        "categoryId": { "anyOf": [{ "$ref": "#/definitions/id" }, { "type": "null" }] },
+        "difficulty": { "enum": ["easy", "medium", "hard"], "default": "easy" },
+        "options": { "type": "array", "maxItems": 10, "items": { "$ref": "#/definitions/option" } },
+        "answer": {},
+        "explanation": { "type": "string", "maxLength": 20000 },
+        "tags": { "type": "array", "maxItems": 20, "items": { "type": "string", "maxLength": 30 } },
+        "score": { "type": "number", "exclusiveMinimum": 0, "maximum": 100, "default": 1 },
+        "createdAt": { "type": "integer", "minimum": 0 },
+        "updatedAt": { "type": "integer", "minimum": 0 }
+      },
+      "allOf": [
+        { "if": { "properties": { "type": { "const": "single" } } }, "then": { "properties": { "answer": { "anyOf": [{ "type": "null" }, { "type": "integer", "minimum": 1 }, { "$ref": "#/definitions/id" }] } } } },
+        { "if": { "properties": { "type": { "const": "multiple" } } }, "then": { "properties": { "answer": { "type": "array", "uniqueItems": true, "maxItems": 10, "items": { "anyOf": [{ "type": "integer", "minimum": 1 }, { "$ref": "#/definitions/id" }] } } } } },
+        { "if": { "properties": { "type": { "const": "boolean" } } }, "then": { "properties": { "answer": { "type": ["boolean", "null"] } } } },
+        { "if": { "properties": { "type": { "const": "fill" } } }, "then": { "properties": { "answer": { "type": "array", "maxItems": 10, "items": { "anyOf": [{ "type": "string", "maxLength": 500 }, { "type": "array", "maxItems": 10, "items": { "type": "string", "maxLength": 500 } }] } } } } },
+        { "if": { "properties": { "type": { "const": "text" } } }, "then": { "properties": { "answer": { "type": "string", "maxLength": 10000 } } } }
+      ],
+      "additionalProperties": false
+    }
+  }
+}

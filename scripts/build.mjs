@@ -1,0 +1,14 @@
+import { build } from 'esbuild';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { compileBank } from '../bank.js';
+const root = new URL('../',import.meta.url);
+const bank = compileBank(JSON.parse(await readFile(new URL('content/bank.json',root),'utf8')));
+const result = await build({ entryPoints: [fileURLToPath(new URL('app.js',root))], bundle: true, write: false, format: 'iife', target: 'es2022', charset: 'utf8' });
+let html = await readFile(new URL('index.html',root),'utf8');
+const css = await readFile(new URL('styles.css',root),'utf8');
+html = html.replace('<link rel="stylesheet" href="styles.css">', `<style>${css}</style>`);
+html = html.replace('<script type="module" src="app.js"></script>', `<script>${result.outputFiles[0].text.replace(/<\/script/gi,'<\\/script')}</script>`);
+await mkdir(new URL('dist/',root), { recursive: true });
+await writeFile(new URL('dist/offline-qbank.html',root),html);
+console.log(`Built dist/offline-qbank.html (${bank.questions.length} authored questions, no external resources)`);
