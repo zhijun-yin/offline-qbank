@@ -2,6 +2,8 @@
 
 A clone-and-customize, local-first question bank framework. Bring your own questions and optional API providers. **No questions are included.**
 
+[![Tests](https://github.com/zhijun-yin/offline-qbank/actions/workflows/test.yml/badge.svg)](https://github.com/zhijun-yin/offline-qbank/actions/workflows/test.yml)
+
 这是给开发者 clone 后自行填题、改界面、接服务的空白框架。仓库的 `content/bank.json` 中分类和题目均为空数组；没有内置、演示或预装题目。
 
 ![空白框架首页](docs/overview.png)
@@ -11,6 +13,8 @@ A clone-and-customize, local-first question bank framework. Bring your own quest
 需要 Node.js 22 或更新版本。在仓库目录执行：
 
 ```sh
+git clone https://github.com/zhijun-yin/offline-qbank.git
+cd offline-qbank
 npm ci
 npm start
 ```
