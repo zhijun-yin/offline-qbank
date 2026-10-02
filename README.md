@@ -1,5 +1,7 @@
 # OfflineQBank · 离线题库框架
 
+[简体中文](README.md) | [English](README.en.md)
+
 A clone-and-customize, local-first question bank framework. Bring your own questions and optional API providers. **No questions are included.**
 
 [![Tests](https://github.com/zhijun-yin/offline-qbank/actions/workflows/test.yml/badge.svg)](https://github.com/zhijun-yin/offline-qbank/actions/workflows/test.yml)
